@@ -36,4 +36,4 @@ Copy `target/HotelBooking-1.0.war` to `TOMCAT_HOME/webapps/`, start Tomcat 10, t
 The database includes five image records per hotel. The demo uses remote Unsplash URLs. The application has a local SVG fallback for failed image loads. For production, replace remote image URLs with licensed/local hotel photography.
 
 ## Important
-This is a starter production-style project, not a payment-enabled production booking platform. Before real deployment, add a payment gateway, externalized secrets, CSRF protection, connection pooling, rate limiting, stronger availability locking, audit logging and proper licensed photography.
+This is a starter production-style project, not a payment-enabled production booking platform. Before real deployment, add a payment gateway, externalized secrets, CSRF protection, connection pooling, rate limiting, stronger availability locking, audit logging and proper licensed photography. 
