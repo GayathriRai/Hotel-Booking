@@ -1,190 +1,915 @@
-CREATE DATABASE IF NOT EXISTS hotel_booking_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE IF NOT EXISTS hotel_booking_db
+CHARACTER SET utf8mb4
+COLLATE utf8mb4_unicode_ci;
+
 USE hotel_booking_db;
+
 DROP TABLE IF EXISTS bookings, rooms, hotel_images, hotels, users;
-CREATE TABLE users(id INT PRIMARY KEY AUTO_INCREMENT,full_name VARCHAR(120) NOT NULL,email VARCHAR(160) UNIQUE NOT NULL,phone VARCHAR(30),password_hash VARCHAR(100) NOT NULL,created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
-CREATE TABLE hotels(id INT PRIMARY KEY AUTO_INCREMENT,name VARCHAR(180) NOT NULL,city VARCHAR(80) NOT NULL,state VARCHAR(80) NOT NULL,address VARCHAR(255),description TEXT,star_rating DECIMAL(2,1),guest_rating DECIMAL(2,1),review_count INT,starting_price DECIMAL(12,2),category VARCHAR(50),amenities VARCHAR(500),check_in_time VARCHAR(20),check_out_time VARCHAR(20),latitude DECIMAL(10,6),longitude DECIMAL(10,6),featured BOOLEAN DEFAULT FALSE);
-CREATE TABLE hotel_images(id INT PRIMARY KEY AUTO_INCREMENT,hotel_id INT NOT NULL,image_url VARCHAR(1000) NOT NULL,image_order INT NOT NULL,UNIQUE KEY uq_hotel_order(hotel_id,image_order),FOREIGN KEY(hotel_id) REFERENCES hotels(id) ON DELETE CASCADE);
-CREATE TABLE rooms(id INT PRIMARY KEY AUTO_INCREMENT,hotel_id INT NOT NULL,room_name VARCHAR(100),description TEXT,max_guests INT,bed_type VARCHAR(80),price_per_night DECIMAL(12,2),available_rooms INT,FOREIGN KEY(hotel_id) REFERENCES hotels(id) ON DELETE CASCADE);
-CREATE TABLE bookings(id INT PRIMARY KEY AUTO_INCREMENT,booking_id VARCHAR(40) UNIQUE NOT NULL,user_id INT NOT NULL,hotel_id INT NOT NULL,room_id INT NOT NULL,guest_name VARCHAR(120),guest_email VARCHAR(160),guest_phone VARCHAR(30),check_in DATE,check_out DATE,adults INT,children INT,rooms INT,subtotal DECIMAL(12,2),tax DECIMAL(12,2),service_fee DECIMAL(12,2),total_amount DECIMAL(12,2),status VARCHAR(20),created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,FOREIGN KEY(user_id) REFERENCES users(id),FOREIGN KEY(hotel_id) REFERENCES hotels(id),FOREIGN KEY(room_id) REFERENCES rooms(id));
-INSERT INTO hotels(name,city,state,address,description,star_rating,guest_rating,review_count,starting_price,category,amenities,check_in_time,check_out_time,latitude,longitude,featured) VALUES ('Royal Mumbai','Mumbai','Maharashtra','Central Mumbai','Taj-inspired coastal luxury near South Mumbai. Enjoy thoughtful service, comfortable rooms and a memorable Indian stay.',4.5,4.3,377,3975,'Resort','Free WiFi,Swimming Pool,Parking,Restaurant,Gym,Spa,Room Service,Air Conditioning','14:00','11:00',18.600000,73.920000,TRUE);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (1,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=11',1);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (1,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=12',2);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (1,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=13',3);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (1,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=14',4);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (1,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=15',5);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (1,'Deluxe Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',3975,8);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (1,'Executive Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',5167,8);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (1,'Luxury Suite','Spacious room with breakfast, WiFi and premium amenities.',4,'King Bed',7155,8);
-INSERT INTO hotels(name,city,state,address,description,star_rating,guest_rating,review_count,starting_price,category,amenities,check_in_time,check_out_time,latitude,longitude,featured) VALUES ('The Heritage Delhi','Delhi','Delhi','Central Delhi','Elegant stay near the capital's cultural landmarks. Enjoy thoughtful service, comfortable rooms and a memorable Indian stay.',4.0,4.4,514,4450,'Business','Free WiFi,Swimming Pool,Parking,Restaurant,Gym,Spa,Room Service,Air Conditioning','14:00','11:00',18.700000,74.040000,TRUE);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (2,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=21',1);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (2,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=22',2);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (2,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=23',3);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (2,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=24',4);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (2,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=25',5);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (2,'Deluxe Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',4450,8);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (2,'Executive Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',5785,8);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (2,'Luxury Suite','Spacious room with breakfast, WiFi and premium amenities.',4,'King Bed',8010,8);
-INSERT INTO hotels(name,city,state,address,description,star_rating,guest_rating,review_count,starting_price,category,amenities,check_in_time,check_out_time,latitude,longitude,featured) VALUES ('The Fern Bangalore','Bangalore','Karnataka','Central Bangalore','Contemporary business hotel in Bengaluru. Enjoy thoughtful service, comfortable rooms and a memorable Indian stay.',4.5,4.5,651,4925,'Boutique','Free WiFi,Swimming Pool,Parking,Restaurant,Gym,Spa,Room Service,Air Conditioning','14:00','11:00',18.800000,74.160000,TRUE);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (3,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=31',1);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (3,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=32',2);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (3,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=33',3);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (3,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=34',4);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (3,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=35',5);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (3,'Deluxe Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',4925,8);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (3,'Executive Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',6402,8);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (3,'Luxury Suite','Spacious room with breakfast, WiFi and premium amenities.',4,'King Bed',8865,8);
-INSERT INTO hotels(name,city,state,address,description,star_rating,guest_rating,review_count,starting_price,category,amenities,check_in_time,check_out_time,latitude,longitude,featured) VALUES ('Regal Hyderabad','Hyderabad','Telangana','Central Hyderabad','Modern luxury close to Hyderabad's attractions. Enjoy thoughtful service, comfortable rooms and a memorable Indian stay.',4.0,4.6,788,5400,'Luxury','Free WiFi,Swimming Pool,Parking,Restaurant,Gym,Spa,Room Service,Air Conditioning','14:00','11:00',18.900000,74.280000,TRUE);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (4,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=41',1);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (4,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=42',2);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (4,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=43',3);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (4,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=44',4);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (4,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=45',5);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (4,'Deluxe Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',5400,8);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (4,'Executive Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',7020,8);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (4,'Luxury Suite','Spacious room with breakfast, WiFi and premium amenities.',4,'King Bed',9720,8);
-INSERT INTO hotels(name,city,state,address,description,star_rating,guest_rating,review_count,starting_price,category,amenities,check_in_time,check_out_time,latitude,longitude,featured) VALUES ('Saffron Chennai','Chennai','Tamil Nadu','Central Chennai','Comfortable city hotel near Chennai's business district. Enjoy thoughtful service, comfortable rooms and a memorable Indian stay.',4.5,4.7,925,5875,'Resort','Free WiFi,Swimming Pool,Parking,Restaurant,Gym,Spa,Room Service,Air Conditioning','14:00','11:00',19.000000,74.400000,TRUE);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (5,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=51',1);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (5,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=52',2);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (5,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=53',3);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (5,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=54',4);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (5,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=55',5);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (5,'Deluxe Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',5875,8);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (5,'Executive Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',7637,8);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (5,'Luxury Suite','Spacious room with breakfast, WiFi and premium amenities.',4,'King Bed',10575,8);
-INSERT INTO hotels(name,city,state,address,description,star_rating,guest_rating,review_count,starting_price,category,amenities,check_in_time,check_out_time,latitude,longitude,featured) VALUES ('The Meridian Kolkata','Kolkata','West Bengal','Central Kolkata','Classic hospitality in the City of Joy. Enjoy thoughtful service, comfortable rooms and a memorable Indian stay.',4.0,4.8,1062,6350,'Business','Free WiFi,Swimming Pool,Parking,Restaurant,Gym,Spa,Room Service,Air Conditioning','14:00','11:00',19.100000,74.520000,TRUE);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (6,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=61',1);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (6,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=62',2);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (6,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=63',3);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (6,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=64',4);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (6,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=65',5);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (6,'Deluxe Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',6350,8);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (6,'Executive Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',8255,8);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (6,'Luxury Suite','Spacious room with breakfast, WiFi and premium amenities.',4,'King Bed',11430,8);
-INSERT INTO hotels(name,city,state,address,description,star_rating,guest_rating,review_count,starting_price,category,amenities,check_in_time,check_out_time,latitude,longitude,featured) VALUES ('The Grand Pune','Pune','Maharashtra','Central Pune','Boutique urban stay for business and leisure. Enjoy thoughtful service, comfortable rooms and a memorable Indian stay.',4.5,4.2,1199,6825,'Boutique','Free WiFi,Swimming Pool,Parking,Restaurant,Gym,Spa,Room Service,Air Conditioning','14:00','11:00',19.200000,74.640000,TRUE);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (7,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=71',1);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (7,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=72',2);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (7,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=73',3);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (7,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=74',4);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (7,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=75',5);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (7,'Deluxe Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',6825,8);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (7,'Executive Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',8872,8);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (7,'Luxury Suite','Spacious room with breakfast, WiFi and premium amenities.',4,'King Bed',12285,8);
-INSERT INTO hotels(name,city,state,address,description,star_rating,guest_rating,review_count,starting_price,category,amenities,check_in_time,check_out_time,latitude,longitude,featured) VALUES ('Royal Goa','Goa','Goa','Central Goa','Beachside resort escape with tropical gardens. Enjoy thoughtful service, comfortable rooms and a memorable Indian stay.',4.0,4.3,1336,7300,'Luxury','Free WiFi,Swimming Pool,Parking,Restaurant,Gym,Spa,Room Service,Air Conditioning','14:00','11:00',19.300000,74.760000,TRUE);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (8,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=81',1);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (8,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=82',2);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (8,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=83',3);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (8,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=84',4);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (8,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=85',5);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (8,'Deluxe Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',7300,8);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (8,'Executive Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',9490,8);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (8,'Luxury Suite','Spacious room with breakfast, WiFi and premium amenities.',4,'King Bed',13140,8);
-INSERT INTO hotels(name,city,state,address,description,star_rating,guest_rating,review_count,starting_price,category,amenities,check_in_time,check_out_time,latitude,longitude,featured) VALUES ('The Heritage Jaipur','Jaipur','Rajasthan','Central Jaipur','Royal-inspired stay in the Pink City. Enjoy thoughtful service, comfortable rooms and a memorable Indian stay.',4.5,4.4,1473,7775,'Resort','Free WiFi,Swimming Pool,Parking,Restaurant,Gym,Spa,Room Service,Air Conditioning','14:00','11:00',19.400000,74.880000,FALSE);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (9,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=91',1);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (9,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=92',2);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (9,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=93',3);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (9,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=94',4);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (9,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=95',5);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (9,'Deluxe Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',7775,8);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (9,'Executive Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',10107,8);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (9,'Luxury Suite','Spacious room with breakfast, WiFi and premium amenities.',4,'King Bed',13995,8);
-INSERT INTO hotels(name,city,state,address,description,star_rating,guest_rating,review_count,starting_price,category,amenities,check_in_time,check_out_time,latitude,longitude,featured) VALUES ('The Fern Udaipur','Udaipur','Rajasthan','Central Udaipur','Lake-city retreat with heritage-inspired interiors. Enjoy thoughtful service, comfortable rooms and a memorable Indian stay.',4.0,4.5,1610,8250,'Business','Free WiFi,Swimming Pool,Parking,Restaurant,Gym,Spa,Room Service,Air Conditioning','14:00','11:00',19.500000,75.000000,FALSE);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (10,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=101',1);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (10,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=102',2);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (10,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=103',3);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (10,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=104',4);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (10,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=105',5);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (10,'Deluxe Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',8250,8);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (10,'Executive Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',10725,8);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (10,'Luxury Suite','Spacious room with breakfast, WiFi and premium amenities.',4,'King Bed',14850,8);
-INSERT INTO hotels(name,city,state,address,description,star_rating,guest_rating,review_count,starting_price,category,amenities,check_in_time,check_out_time,latitude,longitude,featured) VALUES ('Regal Jodhpur','Jodhpur','Rajasthan','Central Jodhpur','Heritage hotel near the Blue City's old quarter. Enjoy thoughtful service, comfortable rooms and a memorable Indian stay.',4.5,4.6,1747,8725,'Boutique','Free WiFi,Swimming Pool,Parking,Restaurant,Gym,Spa,Room Service,Air Conditioning','14:00','11:00',19.600000,75.120000,FALSE);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (11,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=111',1);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (11,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=112',2);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (11,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=113',3);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (11,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=114',4);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (11,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=115',5);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (11,'Deluxe Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',8725,8);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (11,'Executive Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',11342,8);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (11,'Luxury Suite','Spacious room with breakfast, WiFi and premium amenities.',4,'King Bed',15705,8);
-INSERT INTO hotels(name,city,state,address,description,star_rating,guest_rating,review_count,starting_price,category,amenities,check_in_time,check_out_time,latitude,longitude,featured) VALUES ('Saffron Kochi','Kochi','Kerala','Central Kochi','Backwater-inspired stay in vibrant Kochi. Enjoy thoughtful service, comfortable rooms and a memorable Indian stay.',4.0,4.7,1884,9200,'Luxury','Free WiFi,Swimming Pool,Parking,Restaurant,Gym,Spa,Room Service,Air Conditioning','14:00','11:00',19.700000,75.240000,FALSE);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (12,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=121',1);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (12,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=122',2);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (12,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=123',3);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (12,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=124',4);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (12,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=125',5);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (12,'Deluxe Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',9200,8);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (12,'Executive Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',11960,8);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (12,'Luxury Suite','Spacious room with breakfast, WiFi and premium amenities.',4,'King Bed',16560,8);
-INSERT INTO hotels(name,city,state,address,description,star_rating,guest_rating,review_count,starting_price,category,amenities,check_in_time,check_out_time,latitude,longitude,featured) VALUES ('The Meridian Mangalore','Mangalore','Karnataka','Central Mangalore','Coastal comfort between beaches and the city. Enjoy thoughtful service, comfortable rooms and a memorable Indian stay.',4.5,4.8,2021,9675,'Resort','Free WiFi,Swimming Pool,Parking,Restaurant,Gym,Spa,Room Service,Air Conditioning','14:00','11:00',19.800000,75.360000,FALSE);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (13,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=131',1);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (13,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=132',2);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (13,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=133',3);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (13,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=134',4);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (13,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=135',5);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (13,'Deluxe Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',9675,8);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (13,'Executive Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',12577,8);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (13,'Luxury Suite','Spacious room with breakfast, WiFi and premium amenities.',4,'King Bed',17415,8);
-INSERT INTO hotels(name,city,state,address,description,star_rating,guest_rating,review_count,starting_price,category,amenities,check_in_time,check_out_time,latitude,longitude,featured) VALUES ('The Grand Mysore','Mysore','Karnataka','Central Mysore','Relaxed heritage stay near Mysore Palace. Enjoy thoughtful service, comfortable rooms and a memorable Indian stay.',4.0,4.2,2158,10150,'Business','Free WiFi,Swimming Pool,Parking,Restaurant,Gym,Spa,Room Service,Air Conditioning','14:00','11:00',19.900000,75.480000,FALSE);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (14,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=141',1);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (14,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=142',2);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (14,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=143',3);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (14,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=144',4);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (14,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=145',5);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (14,'Deluxe Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',10150,8);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (14,'Executive Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',13195,8);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (14,'Luxury Suite','Spacious room with breakfast, WiFi and premium amenities.',4,'King Bed',18270,8);
-INSERT INTO hotels(name,city,state,address,description,star_rating,guest_rating,review_count,starting_price,category,amenities,check_in_time,check_out_time,latitude,longitude,featured) VALUES ('Royal Ahmedabad','Ahmedabad','Gujarat','Central Ahmedabad','Smart business hotel in Ahmedabad. Enjoy thoughtful service, comfortable rooms and a memorable Indian stay.',4.5,4.3,2295,10625,'Boutique','Free WiFi,Swimming Pool,Parking,Restaurant,Gym,Spa,Room Service,Air Conditioning','14:00','11:00',20.000000,75.600000,FALSE);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (15,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=151',1);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (15,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=152',2);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (15,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=153',3);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (15,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=154',4);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (15,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=155',5);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (15,'Deluxe Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',10625,8);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (15,'Executive Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',13812,8);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (15,'Luxury Suite','Spacious room with breakfast, WiFi and premium amenities.',4,'King Bed',19125,8);
-INSERT INTO hotels(name,city,state,address,description,star_rating,guest_rating,review_count,starting_price,category,amenities,check_in_time,check_out_time,latitude,longitude,featured) VALUES ('The Heritage Chandigarh','Chandigarh','Chandigarh','Central Chandigarh','Stylish modern stay in the planned city. Enjoy thoughtful service, comfortable rooms and a memorable Indian stay.',4.0,4.4,2432,11100,'Luxury','Free WiFi,Swimming Pool,Parking,Restaurant,Gym,Spa,Room Service,Air Conditioning','14:00','11:00',20.100000,75.720000,FALSE);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (16,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=161',1);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (16,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=162',2);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (16,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=163',3);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (16,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=164',4);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (16,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=165',5);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (16,'Deluxe Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',11100,8);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (16,'Executive Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',14430,8);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (16,'Luxury Suite','Spacious room with breakfast, WiFi and premium amenities.',4,'King Bed',19980,8);
-INSERT INTO hotels(name,city,state,address,description,star_rating,guest_rating,review_count,starting_price,category,amenities,check_in_time,check_out_time,latitude,longitude,featured) VALUES ('The Fern Rishikesh','Rishikesh','Uttarakhand','Central Rishikesh','Wellness retreat beside the Himalayan foothills. Enjoy thoughtful service, comfortable rooms and a memorable Indian stay.',4.5,4.5,2569,11575,'Resort','Free WiFi,Swimming Pool,Parking,Restaurant,Gym,Spa,Room Service,Air Conditioning','14:00','11:00',20.200000,75.840000,FALSE);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (17,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=171',1);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (17,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=172',2);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (17,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=173',3);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (17,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=174',4);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (17,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=175',5);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (17,'Deluxe Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',11575,8);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (17,'Executive Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',15047,8);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (17,'Luxury Suite','Spacious room with breakfast, WiFi and premium amenities.',4,'King Bed',20835,8);
-INSERT INTO hotels(name,city,state,address,description,star_rating,guest_rating,review_count,starting_price,category,amenities,check_in_time,check_out_time,latitude,longitude,featured) VALUES ('Regal Varanasi','Varanasi','Uttar Pradesh','Central Varanasi','Peaceful stay near the spiritual heart of Varanasi. Enjoy thoughtful service, comfortable rooms and a memorable Indian stay.',4.0,4.6,2706,12050,'Business','Free WiFi,Swimming Pool,Parking,Restaurant,Gym,Spa,Room Service,Air Conditioning','14:00','11:00',20.300000,75.960000,FALSE);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (18,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=181',1);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (18,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=182',2);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (18,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=183',3);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (18,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=184',4);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (18,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=185',5);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (18,'Deluxe Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',12050,8);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (18,'Executive Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',15665,8);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (18,'Luxury Suite','Spacious room with breakfast, WiFi and premium amenities.',4,'King Bed',21690,8);
-INSERT INTO hotels(name,city,state,address,description,star_rating,guest_rating,review_count,starting_price,category,amenities,check_in_time,check_out_time,latitude,longitude,featured) VALUES ('Saffron Agra','Agra','Uttar Pradesh','Central Agra','Elegant stay close to the Taj Mahal. Enjoy thoughtful service, comfortable rooms and a memorable Indian stay.',4.5,4.7,2843,12525,'Boutique','Free WiFi,Swimming Pool,Parking,Restaurant,Gym,Spa,Room Service,Air Conditioning','14:00','11:00',20.400000,76.080000,FALSE);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (19,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=191',1);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (19,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=192',2);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (19,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=193',3);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (19,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=194',4);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (19,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=195',5);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (19,'Deluxe Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',12525,8);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (19,'Executive Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',16282,8);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (19,'Luxury Suite','Spacious room with breakfast, WiFi and premium amenities.',4,'King Bed',22545,8);
-INSERT INTO hotels(name,city,state,address,description,star_rating,guest_rating,review_count,starting_price,category,amenities,check_in_time,check_out_time,latitude,longitude,featured) VALUES ('The Meridian Shimla','Shimla','Himachal Pradesh','Central Shimla','Mountain-view retreat in the Queen of Hills. Enjoy thoughtful service, comfortable rooms and a memorable Indian stay.',4.0,4.8,2980,13000,'Luxury','Free WiFi,Swimming Pool,Parking,Restaurant,Gym,Spa,Room Service,Air Conditioning','14:00','11:00',20.500000,76.200000,FALSE);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (20,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=201',1);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (20,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=202',2);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (20,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=203',3);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (20,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=204',4);
-INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES (20,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=205',5);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (20,'Deluxe Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',13000,8);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (20,'Executive Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',16900,8);
-INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms) VALUES (20,'Luxury Suite','Spacious room with breakfast, WiFi and premium amenities.',4,'King Bed',23400,8);
--- Demo password is BCrypt for the word "password"; change it before production use.
-INSERT INTO users(full_name,email,phone,password_hash) VALUES ('Demo Guest','demo@example.com','9999999999','$2a$12$LQv3c1yqBW5sG7W2mM7z8uJx3pG8x6f5V9j5Q9o0H5K0vW0Y4u3eW');
+
+CREATE TABLE users (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    full_name VARCHAR(120) NOT NULL,
+    email VARCHAR(160) UNIQUE NOT NULL,
+    phone VARCHAR(30),
+    password_hash VARCHAR(100) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE hotels (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(180) NOT NULL,
+    city VARCHAR(80) NOT NULL,
+    state VARCHAR(80) NOT NULL,
+    address VARCHAR(255),
+    description TEXT,
+    star_rating DECIMAL(2,1),
+    guest_rating DECIMAL(2,1),
+    review_count INT,
+    starting_price DECIMAL(12,2),
+    category VARCHAR(50),
+    amenities VARCHAR(500),
+    check_in_time VARCHAR(20),
+    check_out_time VARCHAR(20),
+    latitude DECIMAL(10,6),
+    longitude DECIMAL(10,6),
+    featured BOOLEAN DEFAULT FALSE
+);
+
+CREATE TABLE hotel_images (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    hotel_id INT NOT NULL,
+    image_url VARCHAR(1000) NOT NULL,
+    image_order INT NOT NULL,
+    UNIQUE KEY uq_hotel_order(hotel_id,image_order),
+    FOREIGN KEY(hotel_id) REFERENCES hotels(id) ON DELETE CASCADE
+);
+
+CREATE TABLE rooms (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    hotel_id INT NOT NULL,
+    room_name VARCHAR(100),
+    description TEXT,
+    max_guests INT,
+    bed_type VARCHAR(80),
+    price_per_night DECIMAL(12,2),
+    available_rooms INT,
+    FOREIGN KEY(hotel_id) REFERENCES hotels(id) ON DELETE CASCADE
+);
+
+CREATE TABLE bookings (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    booking_id VARCHAR(40) UNIQUE NOT NULL,
+    user_id INT NOT NULL,
+    hotel_id INT NOT NULL,
+    room_id INT NOT NULL,
+    guest_name VARCHAR(120),
+    guest_email VARCHAR(160),
+    guest_phone VARCHAR(30),
+    check_in DATE,
+    check_out DATE,
+    adults INT,
+    children INT,
+    rooms INT,
+    subtotal DECIMAL(12,2),
+    tax DECIMAL(12,2),
+    service_fee DECIMAL(12,2),
+    total_amount DECIMAL(12,2),
+    status VARCHAR(20),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY(user_id) REFERENCES users(id),
+    FOREIGN KEY(hotel_id) REFERENCES hotels(id),
+    FOREIGN KEY(room_id) REFERENCES rooms(id)
+);
+
+
+-- =========================================================
+-- HOTEL 1
+-- =========================================================
+
+INSERT INTO hotels
+(name,city,state,address,description,star_rating,guest_rating,review_count,starting_price,category,amenities,check_in_time,check_out_time,latitude,longitude,featured)
+VALUES
+('Royal Mumbai','Mumbai','Maharashtra','Central Mumbai',
+'Taj-inspired coastal luxury near South Mumbai. Enjoy thoughtful service, comfortable rooms and a memorable Indian stay.',
+4.5,4.3,377,3975,'Resort',
+'Free WiFi,Swimming Pool,Parking,Restaurant,Gym,Spa,Room Service,Air Conditioning',
+'14:00','11:00',18.600000,73.920000,TRUE);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(1,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=11',1);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(1,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=12',2);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(1,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=13',3);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(1,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=14',4);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(1,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=15',5);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(1,'Deluxe Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',3975,8);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(1,'Executive Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',5167,8);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(1,'Luxury Suite','Spacious room with breakfast, WiFi and premium amenities.',4,'King Bed',7155,8);
+
+
+-- =========================================================
+-- HOTEL 2
+-- =========================================================
+
+INSERT INTO hotels
+(name,city,state,address,description,star_rating,guest_rating,review_count,starting_price,category,amenities,check_in_time,check_out_time,latitude,longitude,featured)
+VALUES
+('The Heritage Delhi','Delhi','Delhi','Central Delhi',
+'Elegant stay near the capital cultural landmarks. Enjoy thoughtful service, comfortable rooms and a memorable Indian stay.',
+4.0,4.4,514,4450,'Business',
+'Free WiFi,Swimming Pool,Parking,Restaurant,Gym,Spa,Room Service,Air Conditioning',
+'14:00','11:00',18.700000,74.040000,TRUE);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(2,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=21',1);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(2,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=22',2);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(2,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=23',3);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(2,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=24',4);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(2,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=25',5);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(2,'Deluxe Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',4450,8);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(2,'Executive Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',5785,8);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(2,'Luxury Suite','Spacious room with breakfast, WiFi and premium amenities.',4,'King Bed',8010,8);
+
+
+-- =========================================================
+-- HOTEL 3
+-- =========================================================
+
+INSERT INTO hotels
+(name,city,state,address,description,star_rating,guest_rating,review_count,starting_price,category,amenities,check_in_time,check_out_time,latitude,longitude,featured)
+VALUES
+('The Fern Bangalore','Bangalore','Karnataka','Central Bangalore',
+'Contemporary business hotel in Bengaluru. Enjoy thoughtful service, comfortable rooms and a memorable Indian stay.',
+4.5,4.5,651,4925,'Boutique',
+'Free WiFi,Swimming Pool,Parking,Restaurant,Gym,Spa,Room Service,Air Conditioning',
+'14:00','11:00',18.800000,74.160000,TRUE);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(3,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=31',1);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(3,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=32',2);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(3,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=33',3);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(3,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=34',4);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(3,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=35',5);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(3,'Deluxe Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',4925,8);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(3,'Executive Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',6402,8);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(3,'Luxury Suite','Spacious room with breakfast, WiFi and premium amenities.',4,'King Bed',8865,8);
+
+
+-- =========================================================
+-- HOTEL 4
+-- =========================================================
+
+INSERT INTO hotels
+(name,city,state,address,description,star_rating,guest_rating,review_count,starting_price,category,amenities,check_in_time,check_out_time,latitude,longitude,featured)
+VALUES
+('Regal Hyderabad','Hyderabad','Telangana','Central Hyderabad',
+'Modern luxury close to Hyderabad attractions. Enjoy thoughtful service, comfortable rooms and a memorable Indian stay.',
+4.0,4.6,788,5400,'Luxury',
+'Free WiFi,Swimming Pool,Parking,Restaurant,Gym,Spa,Room Service,Air Conditioning',
+'14:00','11:00',18.900000,74.280000,TRUE);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(4,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=41',1);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(4,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=42',2);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(4,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=43',3);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(4,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=44',4);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(4,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=45',5);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(4,'Deluxe Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',5400,8);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(4,'Executive Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',7020,8);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(4,'Luxury Suite','Spacious room with breakfast, WiFi and premium amenities.',4,'King Bed',9720,8);
+
+
+-- =========================================================
+-- HOTEL 5
+-- =========================================================
+
+INSERT INTO hotels
+(name,city,state,address,description,star_rating,guest_rating,review_count,starting_price,category,amenities,check_in_time,check_out_time,latitude,longitude,featured)
+VALUES
+('Saffron Chennai','Chennai','Tamil Nadu','Central Chennai',
+'Comfortable city hotel near Chennai business district. Enjoy thoughtful service, comfortable rooms and a memorable Indian stay.',
+4.5,4.7,925,5875,'Resort',
+'Free WiFi,Swimming Pool,Parking,Restaurant,Gym,Spa,Room Service,Air Conditioning',
+'14:00','11:00',19.000000,74.400000,TRUE);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(5,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=51',1);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(5,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=52',2);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(5,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=53',3);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(5,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=54',4);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(5,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=55',5);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(5,'Deluxe Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',5875,8);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(5,'Executive Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',7637,8);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(5,'Luxury Suite','Spacious room with breakfast, WiFi and premium amenities.',4,'King Bed',10575,8);
+
+
+-- =========================================================
+-- HOTEL 6
+-- =========================================================
+
+INSERT INTO hotels
+(name,city,state,address,description,star_rating,guest_rating,review_count,starting_price,category,amenities,check_in_time,check_out_time,latitude,longitude,featured)
+VALUES
+('The Meridian Kolkata','Kolkata','West Bengal','Central Kolkata',
+'Classic hospitality in the City of Joy. Enjoy thoughtful service, comfortable rooms and a memorable Indian stay.',
+4.0,4.8,1062,6350,'Business',
+'Free WiFi,Swimming Pool,Parking,Restaurant,Gym,Spa,Room Service,Air Conditioning',
+'14:00','11:00',19.100000,74.520000,TRUE);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(6,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=61',1);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(6,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=62',2);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(6,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=63',3);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(6,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=64',4);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(6,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=65',5);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(6,'Deluxe Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',6350,8);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(6,'Executive Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',8255,8);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(6,'Luxury Suite','Spacious room with breakfast, WiFi and premium amenities.',4,'King Bed',11430,8);
+
+
+-- =========================================================
+-- HOTEL 7
+-- =========================================================
+
+INSERT INTO hotels
+(name,city,state,address,description,star_rating,guest_rating,review_count,starting_price,category,amenities,check_in_time,check_out_time,latitude,longitude,featured)
+VALUES
+('The Grand Pune','Pune','Maharashtra','Central Pune',
+'Boutique urban stay for business and leisure. Enjoy thoughtful service, comfortable rooms and a memorable Indian stay.',
+4.5,4.2,1199,6825,'Boutique',
+'Free WiFi,Swimming Pool,Parking,Restaurant,Gym,Spa,Room Service,Air Conditioning',
+'14:00','11:00',19.200000,74.640000,TRUE);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(7,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=71',1);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(7,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=72',2);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(7,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=73',3);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(7,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=74',4);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(7,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=75',5);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(7,'Deluxe Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',6825,8);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(7,'Executive Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',8872,8);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(7,'Luxury Suite','Spacious room with breakfast, WiFi and premium amenities.',4,'King Bed',12285,8);
+
+
+-- =========================================================
+-- HOTEL 8
+-- =========================================================
+
+INSERT INTO hotels
+(name,city,state,address,description,star_rating,guest_rating,review_count,starting_price,category,amenities,check_in_time,check_out_time,latitude,longitude,featured)
+VALUES
+('Royal Goa','Goa','Goa','Central Goa',
+'Beachside resort escape with tropical gardens. Enjoy thoughtful service, comfortable rooms and a memorable Indian stay.',
+4.0,4.3,1336,7300,'Luxury',
+'Free WiFi,Swimming Pool,Parking,Restaurant,Gym,Spa,Room Service,Air Conditioning',
+'14:00','11:00',19.300000,74.760000,TRUE);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(8,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=81',1);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(8,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=82',2);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(8,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=83',3);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(8,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=84',4);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(8,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=85',5);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(8,'Deluxe Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',7300,8);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(8,'Executive Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',9490,8);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(8,'Luxury Suite','Spacious room with breakfast, WiFi and premium amenities.',4,'King Bed',13140,8);
+
+
+-- =========================================================
+-- HOTEL 9
+-- =========================================================
+
+INSERT INTO hotels
+(name,city,state,address,description,star_rating,guest_rating,review_count,starting_price,category,amenities,check_in_time,check_out_time,latitude,longitude,featured)
+VALUES
+('The Heritage Jaipur','Jaipur','Rajasthan','Central Jaipur',
+'Royal-inspired stay in the Pink City. Enjoy thoughtful service, comfortable rooms and a memorable Indian stay.',
+4.5,4.4,1473,7775,'Resort',
+'Free WiFi,Swimming Pool,Parking,Restaurant,Gym,Spa,Room Service,Air Conditioning',
+'14:00','11:00',19.400000,74.880000,FALSE);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(9,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=91',1);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(9,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=92',2);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(9,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=93',3);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(9,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=94',4);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(9,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=95',5);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(9,'Deluxe Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',7775,8);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(9,'Executive Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',10107,8);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(9,'Luxury Suite','Spacious room with breakfast, WiFi and premium amenities.',4,'King Bed',13995,8);
+
+
+-- =========================================================
+-- HOTEL 10
+-- =========================================================
+
+INSERT INTO hotels
+(name,city,state,address,description,star_rating,guest_rating,review_count,starting_price,category,amenities,check_in_time,check_out_time,latitude,longitude,featured)
+VALUES
+('The Fern Udaipur','Udaipur','Rajasthan','Central Udaipur',
+'Lake-city retreat with heritage-inspired interiors. Enjoy thoughtful service, comfortable rooms and a memorable Indian stay.',
+4.0,4.5,1610,8250,'Business',
+'Free WiFi,Swimming Pool,Parking,Restaurant,Gym,Spa,Room Service,Air Conditioning',
+'14:00','11:00',19.500000,75.000000,FALSE);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(10,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=101',1);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(10,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=102',2);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(10,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=103',3);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(10,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=104',4);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(10,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=105',5);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(10,'Deluxe Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',8250,8);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(10,'Executive Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',10725,8);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(10,'Luxury Suite','Spacious room with breakfast, WiFi and premium amenities.',4,'King Bed',14850,8);
+
+
+-- =========================================================
+-- HOTEL 11
+-- =========================================================
+
+INSERT INTO hotels
+(name,city,state,address,description,star_rating,guest_rating,review_count,starting_price,category,amenities,check_in_time,check_out_time,latitude,longitude,featured)
+VALUES
+('Regal Jodhpur','Jodhpur','Rajasthan','Central Jodhpur',
+'Heritage hotel near the Blue City old quarter. Enjoy thoughtful service, comfortable rooms and a memorable Indian stay.',
+4.5,4.6,1747,8725,'Boutique',
+'Free WiFi,Swimming Pool,Parking,Restaurant,Gym,Spa,Room Service,Air Conditioning',
+'14:00','11:00',19.600000,75.120000,FALSE);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(11,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=111',1);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(11,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=112',2);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(11,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=113',3);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(11,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=114',4);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(11,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=115',5);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(11,'Deluxe Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',8725,8);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(11,'Executive Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',11342,8);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(11,'Luxury Suite','Spacious room with breakfast, WiFi and premium amenities.',4,'King Bed',15705,8);
+
+
+-- =========================================================
+-- HOTEL 12
+-- =========================================================
+
+INSERT INTO hotels
+(name,city,state,address,description,star_rating,guest_rating,review_count,starting_price,category,amenities,check_in_time,check_out_time,latitude,longitude,featured)
+VALUES
+('Saffron Kochi','Kochi','Kerala','Central Kochi',
+'Backwater-inspired stay in vibrant Kochi. Enjoy thoughtful service, comfortable rooms and a memorable Indian stay.',
+4.0,4.7,1884,9200,'Luxury',
+'Free WiFi,Swimming Pool,Parking,Restaurant,Gym,Spa,Room Service,Air Conditioning',
+'14:00','11:00',19.700000,75.240000,FALSE);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(12,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=121',1);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(12,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=122',2);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(12,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=123',3);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(12,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=124',4);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(12,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=125',5);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(12,'Deluxe Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',9200,8);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(12,'Executive Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',11960,8);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(12,'Luxury Suite','Spacious room with breakfast, WiFi and premium amenities.',4,'King Bed',16560,8);
+
+
+-- =========================================================
+-- HOTEL 13
+-- =========================================================
+
+INSERT INTO hotels
+(name,city,state,address,description,star_rating,guest_rating,review_count,starting_price,category,amenities,check_in_time,check_out_time,latitude,longitude,featured)
+VALUES
+('The Meridian Mangalore','Mangalore','Karnataka','Central Mangalore',
+'Coastal comfort between beaches and the city. Enjoy thoughtful service, comfortable rooms and a memorable Indian stay.',
+4.5,4.8,2021,9675,'Resort',
+'Free WiFi,Swimming Pool,Parking,Restaurant,Gym,Spa,Room Service,Air Conditioning',
+'14:00','11:00',19.800000,75.360000,FALSE);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(13,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=131',1);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(13,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=132',2);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(13,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=133',3);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(13,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=134',4);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(13,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=135',5);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(13,'Deluxe Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',9675,8);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(13,'Executive Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',12577,8);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(13,'Luxury Suite','Spacious room with breakfast, WiFi and premium amenities.',4,'King Bed',17415,8);
+
+
+-- =========================================================
+-- HOTEL 14
+-- =========================================================
+
+INSERT INTO hotels
+(name,city,state,address,description,star_rating,guest_rating,review_count,starting_price,category,amenities,check_in_time,check_out_time,latitude,longitude,featured)
+VALUES
+('The Grand Mysore','Mysore','Karnataka','Central Mysore',
+'Relaxed heritage stay near Mysore Palace. Enjoy thoughtful service, comfortable rooms and a memorable Indian stay.',
+4.0,4.2,2158,10150,'Business',
+'Free WiFi,Swimming Pool,Parking,Restaurant,Gym,Spa,Room Service,Air Conditioning',
+'14:00','11:00',19.900000,75.480000,FALSE);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(14,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=141',1);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(14,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=142',2);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(14,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=143',3);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(14,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=144',4);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(14,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=145',5);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(14,'Deluxe Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',10150,8);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(14,'Executive Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',13195,8);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(14,'Luxury Suite','Spacious room with breakfast, WiFi and premium amenities.',4,'King Bed',18270,8);
+
+
+-- =========================================================
+-- HOTEL 15
+-- =========================================================
+
+INSERT INTO hotels
+(name,city,state,address,description,star_rating,guest_rating,review_count,starting_price,category,amenities,check_in_time,check_out_time,latitude,longitude,featured)
+VALUES
+('Royal Ahmedabad','Ahmedabad','Gujarat','Central Ahmedabad',
+'Smart business hotel in Ahmedabad. Enjoy thoughtful service, comfortable rooms and a memorable Indian stay.',
+4.5,4.3,2295,10625,'Boutique',
+'Free WiFi,Swimming Pool,Parking,Restaurant,Gym,Spa,Room Service,Air Conditioning',
+'14:00','11:00',20.000000,75.600000,FALSE);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(15,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=151',1);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(15,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=152',2);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(15,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=153',3);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(15,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=154',4);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(15,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=155',5);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(15,'Deluxe Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',10625,8);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(15,'Executive Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',13812,8);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(15,'Luxury Suite','Spacious room with breakfast, WiFi and premium amenities.',4,'King Bed',19125,8);
+
+
+-- =========================================================
+-- HOTEL 16
+-- =========================================================
+
+INSERT INTO hotels
+(name,city,state,address,description,star_rating,guest_rating,review_count,starting_price,category,amenities,check_in_time,check_out_time,latitude,longitude,featured)
+VALUES
+('The Heritage Chandigarh','Chandigarh','Chandigarh','Central Chandigarh',
+'Stylish modern stay in the planned city. Enjoy thoughtful service, comfortable rooms and a memorable Indian stay.',
+4.0,4.4,2432,11100,'Luxury',
+'Free WiFi,Swimming Pool,Parking,Restaurant,Gym,Spa,Room Service,Air Conditioning',
+'14:00','11:00',20.100000,75.720000,FALSE);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(16,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=161',1);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(16,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=162',2);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(16,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=163',3);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(16,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=164',4);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(16,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=165',5);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(16,'Deluxe Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',11100,8);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(16,'Executive Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',14430,8);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(16,'Luxury Suite','Spacious room with breakfast, WiFi and premium amenities.',4,'King Bed',19980,8);
+
+
+-- =========================================================
+-- HOTEL 17
+-- =========================================================
+
+INSERT INTO hotels
+(name,city,state,address,description,star_rating,guest_rating,review_count,starting_price,category,amenities,check_in_time,check_out_time,latitude,longitude,featured)
+VALUES
+('The Fern Rishikesh','Rishikesh','Uttarakhand','Central Rishikesh',
+'Wellness retreat beside the Himalayan foothills. Enjoy thoughtful service, comfortable rooms and a memorable Indian stay.',
+4.5,4.5,2569,11575,'Resort',
+'Free WiFi,Swimming Pool,Parking,Restaurant,Gym,Spa,Room Service,Air Conditioning',
+'14:00','11:00',20.200000,75.840000,FALSE);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(17,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=171',1);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(17,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=172',2);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(17,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=173',3);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(17,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=174',4);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(17,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=175',5);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(17,'Deluxe Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',11575,8);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(17,'Executive Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',15047,8);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(17,'Luxury Suite','Spacious room with breakfast, WiFi and premium amenities.',4,'King Bed',20835,8);
+
+
+-- =========================================================
+-- HOTEL 18
+-- =========================================================
+
+INSERT INTO hotels
+(name,city,state,address,description,star_rating,guest_rating,review_count,starting_price,category,amenities,check_in_time,check_out_time,latitude,longitude,featured)
+VALUES
+('Regal Varanasi','Varanasi','Uttar Pradesh','Central Varanasi',
+'Peaceful stay near the spiritual heart of Varanasi. Enjoy thoughtful service, comfortable rooms and a memorable Indian stay.',
+4.0,4.6,2706,12050,'Business',
+'Free WiFi,Swimming Pool,Parking,Restaurant,Gym,Spa,Room Service,Air Conditioning',
+'14:00','11:00',20.300000,75.960000,FALSE);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(18,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=181',1);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(18,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=182',2);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(18,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=183',3);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(18,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=184',4);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(18,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=185',5);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(18,'Deluxe Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',12050,8);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(18,'Executive Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',15665,8);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(18,'Luxury Suite','Spacious room with breakfast, WiFi and premium amenities.',4,'King Bed',21690,8);
+
+
+-- =========================================================
+-- HOTEL 19
+-- =========================================================
+
+INSERT INTO hotels
+(name,city,state,address,description,star_rating,guest_rating,review_count,starting_price,category,amenities,check_in_time,check_out_time,latitude,longitude,featured)
+VALUES
+('Saffron Agra','Agra','Uttar Pradesh','Central Agra',
+'Elegant stay close to the Taj Mahal. Enjoy thoughtful service, comfortable rooms and a memorable Indian stay.',
+4.5,4.7,2843,12525,'Boutique',
+'Free WiFi,Swimming Pool,Parking,Restaurant,Gym,Spa,Room Service,Air Conditioning',
+'14:00','11:00',20.400000,76.080000,FALSE);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(19,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=191',1);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(19,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=192',2);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(19,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=193',3);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(19,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=194',4);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(19,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=195',5);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(19,'Deluxe Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',12525,8);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(19,'Executive Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',16282,8);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(19,'Luxury Suite','Spacious room with breakfast, WiFi and premium amenities.',4,'King Bed',22545,8);
+
+
+-- =========================================================
+-- HOTEL 20
+-- =========================================================
+
+INSERT INTO hotels
+(name,city,state,address,description,star_rating,guest_rating,review_count,starting_price,category,amenities,check_in_time,check_out_time,latitude,longitude,featured)
+VALUES
+('The Meridian Shimla','Shimla','Himachal Pradesh','Central Shimla',
+'Mountain-view retreat in the Queen of Hills. Enjoy thoughtful service, comfortable rooms and a memorable Indian stay.',
+4.0,4.8,2980,13000,'Luxury',
+'Free WiFi,Swimming Pool,Parking,Restaurant,Gym,Spa,Room Service,Air Conditioning',
+'14:00','11:00',20.500000,76.200000,FALSE);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(20,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=201',1);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(20,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=202',2);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(20,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=203',3);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(20,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=204',4);
+
+INSERT INTO hotel_images(hotel_id,image_url,image_order) VALUES
+(20,'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85&sig=205',5);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(20,'Deluxe Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',13000,8);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(20,'Executive Room','Spacious room with breakfast, WiFi and premium amenities.',2,'King Bed',16900,8);
+
+INSERT INTO rooms(hotel_id,room_name,description,max_guests,bed_type,price_per_night,available_rooms)
+VALUES
+(20,'Luxury Suite','Spacious room with breakfast, WiFi and premium amenities.',4,'King Bed',23400,8);
+
+
+-- =========================================================
+-- DEMO USER
+-- =========================================================
+
+-- Demo password is BCrypt for the word "password".
+-- Change it before production use.
+
+INSERT INTO users(full_name,email,phone,password_hash)
+VALUES
+('Demo Guest','demo@example.com','9999999999',
+'$2a$12$LQv3c1yqBW5sG7W2mM7z8uJx3pG8x6f5V9j5Q9o0H5K0vW0Y4u3eW');
