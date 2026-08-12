@@ -10,7 +10,7 @@ public final class DBConnection {
         "jdbc:mysql://localhost:3306/hotel_booking_db?useSSL=false&serverTimezone=Asia/Kolkata&allowPublicKeyRetrieval=true";
 
     private static final String USER = "hotelapp";
-    private static final String PASSWORD = "YOUR_HOTELAPP_PASSWORD";
+    private static final String PASSWORD = "HotelApp@2026";
 
     private DBConnection() {}
 
