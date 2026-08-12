@@ -1,0 +1,1 @@
+<%@ page contentType="text/html;charset=UTF-8" %><!doctype html><html><body><div style="padding:10%;font-family:Arial"><h1>Something went wrong</h1><p>Please try again.</p><a href="index.jsp">Return home</a></div></body></html>
