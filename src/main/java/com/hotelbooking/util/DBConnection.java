@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public final class DBConnection {
 
     private static final String URL =
-        "jdbc:mysql://localhost:3306/hotel_booking_db" +
+        "jdbc:mysql://hotel-db:3306/hotel_booking_db" +
         "?useSSL=false" +
         "&serverTimezone=Asia/Kolkata" +
         "&allowPublicKeyRetrieval=true";
