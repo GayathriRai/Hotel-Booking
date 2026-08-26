@@ -1,1 +1,0 @@
-// Booking price calculation is validated server-side in BookingServlet.

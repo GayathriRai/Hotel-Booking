@@ -1,1 +1,0 @@
-<%@ page contentType="text/html;charset=UTF-8" %><!doctype html><html><body><div style="padding:10%;font-family:Arial"><h1>404</h1><p>We couldn't find that page.</p><a href="index.jsp">Return home</a></div></body></html>

@@ -1,1 +1,0 @@
-document.querySelectorAll('input[type=date]').forEach(e=>{e.min=new Date().toISOString().split('T')[0]});

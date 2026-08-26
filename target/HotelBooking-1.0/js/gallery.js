@@ -1,1 +1,0 @@
-// Gallery controls are embedded on hotel-details.jsp for server-rendered image data.

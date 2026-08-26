@@ -1,1 +1,0 @@
-// Server-side hotel search handles the main destination query.
