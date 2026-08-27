@@ -1,0 +1,22 @@
+services:
+
+  hotel-db:
+    build:
+      context: ./mysql
+    container_name: hotel-db
+    environment:
+      MYSQL_ROOT_PASSWORD: Root@2026
+      MYSQL_DATABASE: hotel_booking_db
+      MYSQL_USER: hotelapp
+      MYSQL_PASSWORD: HotelApp@2026
+    ports:
+      - "3306:3306"
+
+  hotel-app:
+    build:
+      context: .
+    container_name: tomcat
+    depends_on:
+      - hotel-db
+    ports:
+      - "8080:8080"
