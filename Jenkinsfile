@@ -12,6 +12,7 @@ pipeline {
                     url: 'https://github.com/GayathriRai/Hotel-Booking.git'
             }
         }  
+        
  
      
         stage('Build') {
